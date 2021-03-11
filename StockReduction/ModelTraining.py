@@ -8,6 +8,9 @@ import DataReader
 import TrainingUtil
 
 
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+
 def train_model(model, data, epochs=5, batch_size=64):
     train_loader = DataLoader(data, batch_size=batch_size)
 
@@ -37,9 +40,9 @@ def train_model(model, data, epochs=5, batch_size=64):
 
 if __name__ == '__main__':
     m = torch.nn.Sequential(
-        torch.nn.Linear(850, 1024),
+        torch.nn.Linear(850, 2048),
         torch.nn.ReLU(),
-        torch.nn.Linear(1024, 1024),
+        torch.nn.Linear(2048, 1024),
         torch.nn.ReLU(),
         torch.nn.Linear(1024, 512),
         torch.nn.ReLU(),
@@ -48,17 +51,19 @@ if __name__ == '__main__':
         torch.nn.Linear(256, 1)
     )
 
-    d_train, d_test = DataReader.construct_dataset(800)
+    m = m.to(DEVICE)
 
-    train_model(m, d_train, epochs=200, batch_size=64)
+    d_train, d_test = DataReader.construct_dataset(50000)
+
+    train_model(m, d_train, epochs=50, batch_size=128)
 
     predictions = TrainingUtil.generate_predictions(m, d_train)
     residuals = d_train.ys - predictions
-    plt.scatter(d_train.ys, residuals, color='blue')
+    plt.scatter(d_train.ys.cpu(), residuals.cpu(), color='blue')
 
     predictions = TrainingUtil.generate_predictions(m, d_test)
-    residuals = d_test.ys - predictions
-    plt.scatter(d_test.ys, residuals, color='orange')
+    residuals = (d_test.ys - predictions)
+    plt.scatter(d_test.ys.cpu(), residuals.cpu(), color='orange')
 
     plt.axhline(0, color='red')
     # plt.plot([-5000, 5000], [-5000, 5000], color='red')

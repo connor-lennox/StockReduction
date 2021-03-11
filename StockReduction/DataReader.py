@@ -7,6 +7,7 @@ import FeatureExtraction
 
 
 _DATA_PATH = "data/chessData.csv"
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 def _eval_to_int(eval_in):
@@ -21,7 +22,7 @@ def read_data(num_rows=10000):
     df['Evaluation'] = df['Evaluation'].map(_eval_to_int)
     df['Features'] = df['FEN'].map(FeatureExtraction.features_from_fen)
 
-    return torch.vstack(tuple(df['Features'].values)), torch.tensor(df['Evaluation'].values).float()
+    return torch.vstack(tuple(df['Features'].values)).to(DEVICE), torch.tensor(df['Evaluation'].values).float().to(DEVICE)
 
 
 # def construct_dataset(num_rows=10000, train_split=.8):

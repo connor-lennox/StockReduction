@@ -7,5 +7,5 @@ def pickle_model(model, filename):
 
 
 def unpickle_model(filename):
-    with open("TrainedModels" + '\\' + filename, 'rb') as infile:
+    with open("TrainedModels" + '\\' + filename + '.model', 'rb') as infile:
         return torch.load(infile)

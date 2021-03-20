@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 
 import DataReader
 import TrainingUtil
+import ModelPersistence
 
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -51,9 +52,12 @@ if __name__ == '__main__':
         torch.nn.Linear(256, 1)
     )
 
+    SAVE_MODEL = True
+    MODEL_NAME = "test_saving"
+
     m = m.to(DEVICE)
 
-    d_train, d_test = DataReader.construct_dataset(50000)
+    d_train, d_test = DataReader.construct_dataset(5000)
 
     train_model(m, d_train, epochs=50, batch_size=128)
 
@@ -69,3 +73,6 @@ if __name__ == '__main__':
     # plt.plot([-5000, 5000], [-5000, 5000], color='red')
 
     plt.show()
+
+    if SAVE_MODEL:
+        ModelPersistence.pickle_model(m, MODEL_NAME)

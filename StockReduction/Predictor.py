@@ -22,3 +22,11 @@ def get_next_move(fen_string, model):
         start_board.pop()
 
     return best_move, best_evaluation
+
+
+if __name__ == '__main__':
+    import ModelPersistence
+
+    m = ModelPersistence.unpickle_model("test_saving")
+    start_fen = chess.STARTING_FEN
+    print(get_next_move(start_fen, m))

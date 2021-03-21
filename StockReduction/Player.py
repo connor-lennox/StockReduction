@@ -38,7 +38,7 @@ def play_model_move(maximize=True):
 if __name__ == '__main__':
 
     # Load a model to play against the player
-    MODEL_TO_LOAD = "test_real"
+    MODEL_TO_LOAD = "test_colab"
     model = ModelPersistence.unpickle_model(MODEL_TO_LOAD)
 
     # Board setup
@@ -58,7 +58,7 @@ if __name__ == '__main__':
         play_model_move(MODEL_MAXIMIZES)
 
     # Start thread to get user input
-    threading.Thread(target=get_player_move).start()
+    threading.Thread(target=get_player_move, daemon=True).start()
 
     while True:
         # Must draw the board every frame to avoid hanging and keep up to date with board state
@@ -92,4 +92,4 @@ if __name__ == '__main__':
                 break
 
             # Start thread so that input can be retrieved while still drawing board
-            threading.Thread(target=get_player_move).start()
+            threading.Thread(target=get_player_move, daemon=True).start()

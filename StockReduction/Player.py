@@ -26,7 +26,8 @@ def get_player_move():
 
 
 def get_model_move(maximize=True):
-    return Predictor.get_next_move(board.fen(), model, maximize)
+    # return Predictor.get_next_move(board.fen(), model, maximize)
+    return Predictor.depth_2_predict(board.fen(), model, maximize)
 
 
 def play_model_move(maximize=True):
@@ -38,7 +39,7 @@ def play_model_move(maximize=True):
 if __name__ == '__main__':
 
     # Load a model to play against the player
-    MODEL_TO_LOAD = "test_colab"
+    MODEL_TO_LOAD = "colab_6"
     model = ModelPersistence.unpickle_model(MODEL_TO_LOAD)
 
     # Board setup
@@ -78,6 +79,8 @@ if __name__ == '__main__':
             if board.is_stalemate():
                 print("Stalemate")
                 break
+
+            display.update(board.fen())
 
             # Model's turn
             play_model_move(MODEL_MAXIMIZES)

@@ -18,7 +18,7 @@ def _eval_to_int(eval_in):
     return float(eval_in)
 
 
-def read_data(data_path=_DATA_PATH, num_rows=10000):
+def read_data(data_path, num_rows=10000):
     df = pandas.read_csv(data_path, nrows=num_rows)
 
     df['Evaluation'] = df['Evaluation'].map(_eval_to_int)
@@ -33,8 +33,8 @@ def read_data(data_path=_DATA_PATH, num_rows=10000):
 #     train, test = torch.utils.data.random_split(data, [train_samples, len(data)-train_samples])
 #     return train, test
 
-def construct_dataset(num_rows=10000, train_split=.8):
-    xs, ys = read_data(num_rows)
+def construct_dataset(data_path=_DATA_PATH, num_rows=10000, train_split=.8):
+    xs, ys = read_data(data_path, num_rows)
 
     indices = np.arange(num_rows)
     np.random.shuffle(indices)

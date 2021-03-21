@@ -11,13 +11,15 @@ DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 def _eval_to_int(eval_in):
-    if str(eval_in).startswith("#"):
-        return float(str(eval_in)[1:])
+    if eval_in.startswith("\ufeff"):
+        eval_in = eval_in[1:]
+    if eval_in.startswith("#"):
+        eval_in = eval_in[1:]
     return float(eval_in)
 
 
-def read_data(num_rows=10000):
-    df = pandas.read_csv(_DATA_PATH, nrows=num_rows)
+def read_data(data_path=_DATA_PATH, num_rows=10000):
+    df = pandas.read_csv(data_path, nrows=num_rows)
 
     df['Evaluation'] = df['Evaluation'].map(_eval_to_int)
     df['Features'] = df['FEN'].map(FeatureExtraction.features_from_fen)

@@ -36,9 +36,10 @@ def features_from_board(board):
     # Count features: counts of each piece type (numeric)
 
     # Get counts for each piece type
-    counts = np.zeros(12)
-    for num in layout_nums:
-        counts[num-1] += 1
+    counts = np.zeros(13)
+    us, cs = torch.unique(layout_nums, return_counts=True)
+    for u, c in zip(us, cs):
+        counts[u] = c
 
     # Convert counts to a tensor for concatenation purposes
     counts = torch.tensor(counts)
@@ -65,6 +66,12 @@ def features_from_board(board):
 
 
 if __name__ == '__main__':
+    from timeit import timeit
+
     test_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    test_board = chess.Board(test_fen)
+
+    # print(timeit(lambda: chess.Board(test_fen), number=5000))
+    # print(timeit(lambda: features_from_board(test_board), number=10000))
 
     print(features_from_fen(test_fen))

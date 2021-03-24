@@ -41,35 +41,31 @@ def train_model(model, data, epochs=5, batch_size=64):
 
 if __name__ == '__main__':
     m = torch.nn.Sequential(
-        torch.nn.Linear(850, 2048),
-        torch.nn.ReLU(),
-        torch.nn.Linear(2048, 1024),
-        torch.nn.ReLU(),
-        torch.nn.Linear(1024, 512),
-        torch.nn.ReLU(),
-        torch.nn.Linear(512, 256),
-        torch.nn.ReLU(),
-        torch.nn.Linear(256, 1)
+        torch.nn.Linear(851, 2048),
+        torch.nn.LeakyReLU(),
+        torch.nn.Linear(2048, 2048),
+        torch.nn.LeakyReLU(),
+        torch.nn.Linear(2048, 1)
     )
 
     SAVE_MODEL = True
-    MODEL_NAME = "test_saving"
+    MODEL_NAME = "model_name"
 
     m = m.to(DEVICE)
 
-    d_train, d_test = DataReader.construct_dataset(5000)
+    d_train, d_test = DataReader.construct_dataset(500000)
 
     train_model(m, d_train, epochs=50, batch_size=128)
 
-    predictions = TrainingUtil.generate_predictions(m, d_train)
-    residuals = d_train.ys - predictions
-    plt.scatter(d_train.ys.cpu(), residuals.cpu(), color='blue')
-
-    predictions = TrainingUtil.generate_predictions(m, d_test)
-    residuals = (d_test.ys - predictions)
-    plt.scatter(d_test.ys.cpu(), residuals.cpu(), color='orange')
-
-    plt.axhline(0, color='red')
+    # predictions = TrainingUtil.generate_predictions(m, d_train)
+    # residuals = d_train.ys - predictions
+    # plt.scatter(d_train.ys.cpu(), residuals.cpu(), color='blue')
+    #
+    # predictions = TrainingUtil.generate_predictions(m, d_test)
+    # residuals = (d_test.ys - predictions)
+    # plt.scatter(d_test.ys.cpu(), residuals.cpu(), color='orange')
+    #
+    # plt.axhline(0, color='red')
     # plt.plot([-5000, 5000], [-5000, 5000], color='red')
 
     plt.show()

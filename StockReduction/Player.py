@@ -4,6 +4,7 @@ import chess
 from chessboard import display
 
 import ModelPersistence
+import FeatureExtraction
 import Predictor
 
 
@@ -39,7 +40,7 @@ def play_model_move(maximize=True):
 if __name__ == '__main__':
 
     # Load a model to play against the player
-    MODEL_TO_LOAD = "colab_6"
+    MODEL_TO_LOAD = "colab_16"
     model = ModelPersistence.unpickle_model(MODEL_TO_LOAD)
 
     # Board setup
@@ -49,7 +50,7 @@ if __name__ == '__main__':
     # When the model plays as white, it should be maximizing the evaluation function. When it plays
     # as black, it needs to minimize the evaluation function as large negative values are desirable
     # for the black player.
-    MODEL_PLAYS_WHITE = False
+    MODEL_PLAYS_WHITE = True
     MODEL_MAXIMIZES = MODEL_PLAYS_WHITE
 
     # If the model is playing as white, it should make a move before the player can input anything
@@ -81,6 +82,8 @@ if __name__ == '__main__':
                 break
 
             display.update(board.fen())
+
+            print(f"State eval: {model(FeatureExtraction.features_from_board(board)).item()}")
 
             # Model's turn
             play_model_move(MODEL_MAXIMIZES)

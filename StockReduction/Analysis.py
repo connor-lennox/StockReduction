@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 
 import ModelPersistence
 import TrainingUtil
+from DataReader import EvalDataset
 
 
 def do_analysis(model_file, data_file, draw):
@@ -30,15 +31,15 @@ def do_analysis(model_file, data_file, draw):
     print(f" MAE of {MODEL_TO_ANALYZE}: {mae}")
 
     if draw:
-        plt.scatter(data.ys[:4000], preds)
-        plt.plot([-5000, 5000], [-5000, 5000], color='red')
+        plt.scatter(data.ys, residuals)
+        plt.axhline(0)
         plt.grid()
         plt.show()
 
 
 if __name__ == '__main__':
     MODEL_TO_ANALYZE = "colab_19_2"
-    TEST_DATA = "temp_test.pt"
-    DRAW_PLOTS = False
+    TEST_DATA = "testing_data.pt"
+    DRAW_PLOTS = True
 
     do_analysis(MODEL_TO_ANALYZE, TEST_DATA, DRAW_PLOTS)

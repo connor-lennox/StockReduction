@@ -57,6 +57,8 @@ class EvalDataset(Dataset):
 
 
 if __name__ == '__main__':
-    test_dataset = EvalDataset(*read_data(num_rows=1000))
-    print(test_dataset[0])
-    print(len(test_dataset))
+    test_dataset = construct_dataset(num_rows=200000)
+    with open("data/training_data.pt", 'wb+') as outfile:
+        torch.save(test_dataset[0], outfile)
+    with open("data/testing_data.pt", 'wb+') as outfile:
+        torch.save(test_dataset[1], outfile)
